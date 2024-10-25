@@ -1,0 +1,16 @@
+{
+    "produtos": [
+      { "id": 1, "nome": "Teclado Logitech Silent Touch", "avaliacao": 4, "totalAvaliacoes": 935, "preco": 199.90, "foto": "link_da_imagem" },
+      { "id": 2, "nome": "Placa De Vídeo Gigabyte NVIDIA GeForce RTX 4090", "avaliacao": 5, "totalAvaliacoes": 128, "preco": 13899.90, "foto": "link_da_imagem" },
+      { "id": 3, "nome": "Pen Drive 128gb Cruzer Blade - Sandisk", "avaliacao": 3, "totalAvaliacoes": 128, "preco": 79.80, "foto": "link_da_imagem" },
+      { "id": 4, "nome": "Carregador USB-C de 20W Apple Branco Original", "avaliacao": 4, "totalAvaliacoes": 150, "preco": 129.99, "foto": "link_da_imagem" },
+      { "id": 5, "nome": "Controle Sony Ps5 Dualsense, Sem Fio, Cobalt Blue", "avaliacao": 5, "totalAvaliacoes": 355, "preco": 429.00, "foto": "link_da_imagem" },
+      { "id": 6, "nome": "Smartphone Apple Iphone 13 256gb", "avaliacao": 5, "totalAvaliacoes": 899, "preco": 3899.99, "foto": "link_da_imagem" },
+      { "id": 7, "nome": "Microfone Hyperx Solocast Podcast, Usb, Pedestal Ajustável", "avaliacao": 2, "totalAvaliacoes": 500, "preco": 395.25, "foto": "link_da_imagem" },
+      { "id": 8, "nome": "Mochila HyperX Knight, Até 16, Poliester, Preto", "avaliacao": 2, "totalAvaliacoes": 330, "preco": 639.00, "foto": "link_da_imagem" },
+      { "id": 9, "nome": "Pasta Térmica Rise Mode Silver Frost, 5g, Cinza", "avaliacao": 5, "totalAvaliacoes": 850, "preco": 10.99, "foto": "link_da_imagem" },
+      { "id": 10, "nome":"entoinha Rise Mode, 120mm, Preto", "avaliacao": 5, "totalAvaliacoes": 345, "preco": 6.99, "foto": "link_da_imagem" }
+      
+    ]
+  }
+  
