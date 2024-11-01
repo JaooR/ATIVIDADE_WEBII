@@ -6,33 +6,81 @@
     </div>
 
     <!-- Segundo container -->
-    <div class="title-container">
-      <h1></h1>
-    </div>
-
-    <!-- Terceiro container -->
-    <div class="title-container">
-      <h1></h1>
-    </div>
-
-    <!-- Quarto container  -->
-    <div class="title-container">
-      <h1></h1>
-    </div>
-
-    <!-- Continuação do layout para produtos e botões -->
-    <div v-for="produto in produtos" :key="produto.id" class="product-container">
+    <div class="title-container custom-container">
       <div class="product-card">
-        <img :src="require('@/assets/' + produto.foto)" :alt="produto.nome" class="product-image"/>
+        <img src="@/assets/TECLADO.png"
+             alt="Teclado Logitech Silencioso"
+             class="product-image"
+             style="width: 90px; height: 75px; margin-left: 15px"/>
         <div class="product-info">
-          <h3>{{ produto.nome }}</h3>
-          <p>{{ produto.avaliacao }} Estrelas ({{ produto.totalAvaliacoes }} avaliações)</p>
-          <p>R$ {{ produto.preco }}</p>
-          <button @click="adicionarAoCarrinho(produto)">Adicionar ao carrinho</button>
+          <div class="text-info">
+            <h3>Teclado Logitech Silent Touch</h3>
+            <div class="rating">
+              <span class="star">&#9733;</span> <!-- Estrela cheia -->
+              <span class="star">&#9733;</span>
+              <span class="star">&#9733;</span>
+              <span class="star">&#9734;</span> <!-- Estrela vazia -->
+              <span class="star">&#9734;</span>
+              <span class="ratings-count">(935 avaliações)</span>
+            </div>
+            <p class="price">R$ 199,90</p>
+          </div>
+          <button @click="adicionarAoCarrinho(produtos[0])" class="add-to-cart-button">Adicionar ao carrinho</button>
         </div>
       </div>
     </div>
 
+    <!-- Terceiro container -->
+    <div class="title-container custom-container">
+      <div class="product-card">
+        <img src="@/assets/PLACA DE VIDEO.png"
+             alt="Placa De Vídeo Gigabyte NVIDIA GeForce RTX 4090 AORUS MASTER, 24GB..."
+             class="product-image"
+             style="width: 90px; height: 75px; margin-left: 15px"/>
+        <div class="product-info">
+          <div class="text-info">
+            <h3>Placa De Vídeo Gigabyte NVIDIA GeForce <P>RTX 4090 AORUS MASTER, 24GB...</P></h3>
+            <div class="rating">
+              <span class="star">&#9733;</span> <!-- Estrela cheia -->
+              <span class="star">&#9733;</span>
+              <span class="star">&#9733;</span>
+              <span class="star">&#9733;</span> <!-- Estrela vazia -->
+              <span class="star">&#9734;</span>
+              <span class="ratings-count">(128 avaliações)</span>
+            </div>
+            <p class="price">R$ 13.899,90</p>
+          </div>
+          <button @click="adicionarAoCarrinho(produtos[1])" class="add-to-cart-button">Adicionar ao carrinho</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quarto container -->
+    <div class="title-container custom-container">
+      <div class="product-card">
+        <img src="@/assets/PENDRIVE.png"
+             alt="Placa De Vídeo Gigabyte NVIDIA GeForce RTX 4090 AORUS MASTER, 24GB..."
+             class="product-image"
+             style="width: 90px; height: 75px; margin-left: 15px"/>
+        <div class="product-info">
+          <div class="text-info">
+            <h3>Pen Drive 128gb Cruzer Blade - Sandisk</h3>
+            <div class="rating">
+              <span class="star">&#9733;</span> <!-- Estrela cheia -->
+              <span class="star">&#9733;</span>
+              <span class="star">&#9733;</span>
+              <span class="star">&#9733;</span> <!-- Estrela vazia -->
+              <span class="star">&#9734;</span>
+              <span class="ratings-count">(128 avaliações)</span>
+            </div>
+            <p class="price">R$ 79,80</p>
+          </div>
+          <button @click="adicionarAoCarrinho(produtos[2])" class="add-to-cart-button">Adicionar ao carrinho</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botões -->
     <div class="buttons-container">
       <button @click="carregarMaisProdutos" class="button">Carregar mais produtos</button>
       <button @click="irParaCarrinho" class="button ir-para-carrinho">Ir para o carrinho</button>
@@ -40,36 +88,36 @@
   </div>
 </template>
 
-
-
-
 <script>
 import axios from 'axios';
 
 export default {
   data() {
     return {
-      produtos: []
-    }
+      produtos: [],
+      visibleProducts: 3,
+      totalProducts: 10
+    };
   },
   methods: {
     carregarProdutos() {
       axios.get('http://localhost:3000/produtos')
         .then(response => {
           this.produtos = response.data;
+          this.produtos = this.produtos.slice(0, this.visibleProducts);
         })
         .catch(error => console.error(error));
     },
-    adicionarAoCarrinho(produto) {
-      let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-      carrinho.push(produto);
-      localStorage.setItem('carrinho', JSON.stringify(carrinho));
-    },
     carregarMaisProdutos() {
-      // Implementar a lógica para carregar mais produtos, se necessário
+      let nextLoad = this.visibleProducts + 3;
+      if (nextLoad < this.totalProducts) {
+        this.visibleProducts = nextLoad;
+      } else {
+        this.visibleProducts = this.totalProducts;
+      }
+      this.carregarProdutos();
     },
     irParaCarrinho() {
-      // Redirecionamento ou outra lógica aqui
       console.log("Redirecionando para o carrinho...");
     }
   },
@@ -80,83 +128,141 @@ export default {
 </script>
 
 <style scoped>
-.main-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Mantém os itens alinhados ao centro horizontalmente */
-  justify-content: center; /* Adiciona centralização no eixo horizontal */
-  width: 100%; /* A largura máxima para ocupar toda a largura disponível */
-}
+  .main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
 
-.title-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center; /* Centraliza o conteúdo verticalmente */
-  width: 938px; /* Largura especificada */
-  height: 179px; /* Altura especificada */
-  background-color: #23242C;
-  border: -1px solid #23242C;
-  margin-bottom: 2px; /* Espaço reduzido entre containers */
-}
+  .title-container {
+    width: 50%;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #23242C;
+    padding: 10px 0;
+    margin: 1px;
+  }
 
-h1 {
-  font-family: 'Inter', sans-serif;
-  font-size: 19px;
-  font-weight: 700;
-  line-height: 24px;
-  text-align: center; /* Alinhamento central para o título */
-  color: white;
-}
+  h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    margin-left: -498px;
+    color: white;
+  }
 
-.buttons-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  width: 100%;
-}
+  .first-container {
+    height: 30px;
+    width: 50%;
+    margin: auto;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
 
-.button, .ir-para-carrinho {
-  width: 338px;
-  height: 57px;
-  margin: 10px;
-  font-size: 21px;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  background-color: #6200ea; /* Restaura a cor inicial dos botões */
-}
+  .product-card {
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
 
-.button:hover {
-  background-color: #3700b3;
-}
+  .product-image {
+    width: 122px;
+    height: 122px;
+    margin-right: 25px;
+    border-radius: 6px;
+  }
 
-.ir-para-carrinho {
-  background-color: #39CC33;
-}
+  .product-info {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-.ir-para-carrinho:hover {
-  background-color: #2e9929;
+  .text-info {
+    display: flex;
+    flex-direction: column;
+  }
 
-  
-}
+  .add-to-cart-button {
+    position: relative;
+    top: -60px;
+    left: -30px;
+    margin-left: 350px;
+    background-color: #39115C;
+    border: 2px solid #A33AFF;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
 
-.first-container {
-  width: 938px; /* Reduz a largura do primeiro container */
-  height: 57px; /* Reduz a altura do primeiro container */
-  margin-bottom: 2px; /* Ajusta o espaçamento se necessário */
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-}
+  .add-to-cart-button:hover {
+    background-color: #2e9929;
+  }
+
+  .rating {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+  }
+
+  .star {
+    color: #FFAE00;
+    margin-right: 1px;
+  }
+
+  .ratings-count {
+    font-size: 13px;
+    color: #646464;
+    margin-left: 10px;
+  }
+
+  h3, p {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    margin: 0;
+    color: white;
+  }
+
+  .product-info p.price {
+    font-size: 29px;
+    color: #A33AFF;
+  }
+
+  .buttons-container {
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .button, .ir-para-carrinho {
+    width: 338px;
+    height: 45px;
+    margin: 10px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #6200ea;
+  }
+
+  .button:hover {
+    background-color: #3700b3;
+  }
+
+  .ir-para-carrinho {
+    background-color: #39CC33;
+  }
+
+  .ir-para-carrinho:hover {
+    background-color: #2e9929;
+  }
 </style>
-
-
-
-
-
-
-
-
-
-
