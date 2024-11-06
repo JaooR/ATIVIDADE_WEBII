@@ -8,10 +8,13 @@
     <!-- Segundo container -->
     <div class="title-container custom-container">
       <div class="product-card">
-        <img src="@/assets/TECLADO.png"
-             alt="Teclado Logitech Silencioso"
-             class="product-image"
-             style="width: 90px; height: 75px; margin-left: 15px"/>
+        <!-- Adicione a tag <a> com target="_blank" para abrir a imagem em nova aba -->
+        <a :href="require('@/assets/TECLADO.png')" target="_blank">
+          <img src="@/assets/TECLADO.png"
+               alt="Teclado Logitech Silencioso"
+               class="product-image"
+               style="width: 90px; height: 75px; margin-left: 15px"/>
+        </a>
         <div class="product-info">
           <div class="text-info">
             <h3>Teclado Logitech Silent Touch</h3>
@@ -33,10 +36,12 @@
     <!-- Terceiro container -->
     <div class="title-container custom-container">
       <div class="product-card">
-        <img src="@/assets/PLACA DE VIDEO.png"
-             alt="Placa De Vídeo Gigabyte NVIDIA GeForce RTX 4090 AORUS MASTER, 24GB..."
-             class="product-image"
-             style="width: 90px; height: 75px; margin-left: 15px"/>
+        <a :href="require('@/assets/PLACA DE VIDEO.png')" target="_blank">
+          <img src="@/assets/PLACA DE VIDEO.png"
+               alt="Placa De Vídeo Gigabyte NVIDIA GeForce RTX 4090 AORUS MASTER, 24GB..."
+               class="product-image"
+               style="width: 90px; height: 75px; margin-left: 15px"/>
+        </a>
         <div class="product-info">
           <div class="text-info">
             <h3>Placa De Vídeo Gigabyte NVIDIA GeForce <P>RTX 4090 AORUS MASTER, 24GB...</P></h3>
@@ -44,7 +49,7 @@
               <span class="star">&#9733;</span> <!-- Estrela cheia -->
               <span class="star">&#9733;</span>
               <span class="star">&#9733;</span>
-              <span class="star">&#9733;</span> <!-- Estrela vazia -->
+              <span class="star">&#9733;</span> <!-- Estrela cheia -->
               <span class="star">&#9734;</span>
               <span class="ratings-count">(128 avaliações)</span>
             </div>
@@ -58,10 +63,12 @@
     <!-- Quarto container -->
     <div class="title-container custom-container">
       <div class="product-card">
-        <img src="@/assets/PENDRIVE.png"
-             alt="Placa De Vídeo Gigabyte NVIDIA GeForce RTX 4090 AORUS MASTER, 24GB..."
-             class="product-image"
-             style="width: 90px; height: 75px; margin-left: 15px"/>
+        <a :href="require('@/assets/PENDRIVE.png')" target="_blank">
+          <img src="@/assets/PENDRIVE.png"
+               alt="Pen Drive 128gb Cruzer Blade - Sandisk"
+               class="product-image"
+               style="width: 90px; height: 75px; margin-left: 15px"/>
+        </a>
         <div class="product-info">
           <div class="text-info">
             <h3>Pen Drive 128gb Cruzer Blade - Sandisk</h3>
@@ -69,7 +76,7 @@
               <span class="star">&#9733;</span> <!-- Estrela cheia -->
               <span class="star">&#9733;</span>
               <span class="star">&#9733;</span>
-              <span class="star">&#9733;</span> <!-- Estrela vazia -->
+              <span class="star">&#9733;</span> <!-- Estrela cheia -->
               <span class="star">&#9734;</span>
               <span class="ratings-count">(128 avaliações)</span>
             </div>
@@ -83,7 +90,7 @@
     <!-- Botões -->
     <div class="buttons-container">
       <button @click="carregarMaisProdutos" class="button">Carregar mais produtos</button>
-      <button @click="irParaCarrinho" class="button ir-para-carrinho">Ir para o carrinho</button>
+      <button @click="$router.push('/PAGINA2')" class="button ir-para-carrinho">Ir para o carrinho</button>
     </div>
   </div>
 </template>
@@ -108,17 +115,9 @@ export default {
         })
         .catch(error => console.error(error));
     },
-    carregarMaisProdutos() {
-      let nextLoad = this.visibleProducts + 3;
-      if (nextLoad < this.totalProducts) {
-        this.visibleProducts = nextLoad;
-      } else {
-        this.visibleProducts = this.totalProducts;
-      }
-      this.carregarProdutos();
-    },
-    irParaCarrinho() {
-      console.log("Redirecionando para o carrinho...");
+    adicionarAoCarrinho(produto) {
+      // Implemente a lógica para adicionar ao carrinho aqui
+      console.log("Produto adicionado:", produto.nome);
     }
   },
   mounted() {
