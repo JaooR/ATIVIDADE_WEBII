@@ -1,20 +1,27 @@
+// store/index.js
 import { createStore } from 'vuex';
 
 export default createStore({
   state: {
-    cartItems: []
+    cart: []
   },
   mutations: {
-    addToCart(state, item) {
-      state.cartItems.push(item);
-    }
-  },
-  actions: {
-    addToCart({ commit }, item) {
-      commit('addToCart', item);
+    ADD_TO_CART(state, product) {
+      state.cart.push(product);
+    },
+    CLEAR_CART(state) {
+      state.cart = [];
+    },
+    REMOVE_ITEM(state, productToRemove) {
+      // Encontra o índice do produto a ser removido
+      const index = state.cart.findIndex(item => item.id === productToRemove.id);
+      if (index !== -1) {
+        // Remove o item do carrinho
+        state.cart.splice(index, 1);
+      }
     }
   },
   getters: {
-    cartItems: state => state.cartItems
+    cartItems: state => state.cart
   }
 });
