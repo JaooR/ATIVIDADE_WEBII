@@ -6,30 +6,40 @@
 
     <div v-for="item in cartItems" :key="item.id" class="product-card">
       <img :src="item.imagem" alt="Foto do produto" class="product-image" />
-<div class="product-details">
-  <h3>
-    <span v-if="item.nome.includes('RTX 4090 AORUS MASTER')">
-      Placa De Vídeo Gigabyte NVIDIA GeForce <br />
-      RTX 4090 AORUS MASTER, 24GB
-    </span>
-    <span v-else>{{ item.nome }}</span>
-  </h3>
-  <div class="rating">
-    <span class="star">&#9733;&#9733;&#9733;&#9734;&#9734;</span>
-    <span class="ratings-count">(935 avaliações)</span>
-  </div>
-  <p class="price">R$ {{ item.preco.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</p>
-</div>
+      <div class="product-details">
+        <h3>
+          <span v-if="item.nome.includes('RTX 4090 AORUS MASTER')">
+            Placa De Vídeo Gigabyte NVIDIA GeForce <br />
+            RTX 4090 AORUS MASTER, 24GB
+          </span>
+          <span v-else>{{ item.nome }}</span>
+        </h3>
+        <div class="rating">
+          <span class="star">&#9733;&#9733;&#9733;&#9734;&#9734;</span>
+          <span class="ratings-count">({{ item.avaliacoes }} avaliações)</span>
+        </div>
+        <p class="price">R$ {{ item.preco.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</p>
+      </div>
       <div
-        :class="[ 'quantity-controls', item.nome.includes('RTX 4090 AORUS MASTER') ? 'adjusted-controls' : '', item.nome.includes('Teclado Logitech Silent Touch') ? 'adjusted-keyboard-controls' : '' ]">
+        :class="[ 'quantity-controls', 
+        item.nome.includes('RTX 4090 AORUS MASTER') ? 'adjusted-controls' : '', 
+        item.nome.includes('Teclado Logitech Silent Touch') ? 'adjusted-keyboard-controls' : '',
+        item.nome.includes('Controle Sony Ps5 Dualsense') ? 'adjusted-dualsense-controls' : '',
+        item.nome.includes('Smartphone Apple Iphone 13') ? 'adjusted-iphone-controls' : '',
+        item.nome.includes('Microfone Hyperx Solocast Podcast') ? 'adjusted-microphone-controls' : '',
+        item.nome.includes('Mochila HyperX Knight') ? 'adjusted-backpack-controls' : '',
+        item.nome.includes('Carregador USB-C de 20W Apple') ? 'adjusted-charger-controls' : '' 
+        ]">
         <button @click="increaseQuantity(item)">&#43;</button>
         <span>{{ item.quantidade }}</span>
         <button @click="decreaseQuantity(item)">&#8722;</button>
       </div>
 
-      <div class="subtotal" :class="{ 'adjusted-subtotal': item.nome.includes('RTX 4090 AORUS MASTER') }">
-        <p>Subtotal</p>
-        <p>R$ {{ (item.preco * item.quantidade).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</p>
+      <div class="subtotal-container">
+        <p class="subtotal-label">Subtotal</p>
+        <p class="subtotal-value">
+          <span class="currency">R$</span>{{ (item.preco * item.quantidade).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
+        </p>
       </div>
     </div>
 
@@ -171,6 +181,7 @@ export default {
   width: 660.70px;
   margin: 1px 0;
 }
+
 .product-image {
   width: 90px;
   height: 80px;
@@ -179,8 +190,8 @@ export default {
 }
 
 .product-details {
+  margin-top: 40px;
   font-family: 'Inter', sans-serif;
-  margin-top: 40px; /* Ajuste o valor conforme necessário */
   flex: 2;
   color: white;
   display: flex;
@@ -213,7 +224,7 @@ h3 {
   font-family: 'Inter', sans-serif;
   font-size: 29px;
   color: #a33aff;
-  margin-top: 10px;
+  margin-top: -5px; /* Subindo o valor do produto */
 }
 
 .quantity-controls {
@@ -224,12 +235,46 @@ h3 {
   margin-right: 100px;
 }
 
-.adjusted-controls {
-  margin-right: 89px; /* Ajuste específico para o produto RTX 4090 */
+.subtotal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 120px;
 }
 
-.adjusted-keyboard-controls {
-  margin-right: 80px; /* Ajuste específico para o produto Teclado Logitech Silent Touch */
+.subtotal-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  color: #FFFFFF;
+  text-align: right;
+  margin: 0;
+}
+
+.subtotal-value {
+  font-family: 'Inter', sans-serif;
+  color: #a33aff;
+  font-size: 29px;
+  margin: 0;
+  text-align: right;
+}
+
+.currency {
+  font-size: 29px;
+  margin-right: 4px;
+}
+
+.total-container {
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  justify-content: space-between;
+  background-color: #23242C;
+  width: 660.70px;
+  padding: 10px;
+  color: white;
+  font-size: 18px;
+  margin-top: 10px 0;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
 .quantity-controls button {
@@ -252,47 +297,6 @@ h3 {
   margin: 0; /* Remove qualquer margem */
   padding: 0; /* Remove qualquer padding */
   text-align: center; /* Centraliza o número */
-}
-
-.subtotal {
-  font-family: 'Inter', sans-serif;
-  color: #a33aff;
-  font-size: 29px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-right: 40px;
-  min-width: 90px; /* Define uma largura mínima para alinhar */
-}
-
-.subtotal p {
-  margin: 0;
-}
-
-.subtotal p:first-child {
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
-  color: #FFFFFF;
-  text-align: left;
-  margin-right: 60px;
-}
-
-.adjusted-subtotal p:last-child {
-  margin-right: -50px; /* Ajuste para mover o valor para a direita */
-}
-
-.total-container {
-  font-family: 'Inter', sans-serif;
-  display: flex;
-  justify-content: space-between;
-  background-color: #23242C;
-  width: 660.70px;
-  padding: 10px;
-  color: white;
-  font-size: 18px;
-  margin-top: 10px 0;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
 }
 
 .total-label {
@@ -368,7 +372,6 @@ h3 {
   text-align: left; /* Alinhamento geral do texto */
   position: relative;
 }
-
 
 .close-button {
   position: absolute;

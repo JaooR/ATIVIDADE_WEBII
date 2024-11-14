@@ -1,98 +1,44 @@
 <template>
   <div class="main-container">
-    <!-- Primeiro container com o título 'Carrinho de compras' -->
+    <!-- Título -->
     <div class="title-container first-container">
       <h1>Carrinho de compras</h1>
     </div>
 
-    <!-- Produto 1 -->
-    <div class="title-container custom-container">
+    <!-- Renderização dos produtos visíveis -->
+    <div v-for="produto in produtosVisiveis" :key="produto.id" class="title-container custom-container">
       <div class="product-card">
-        <a :href="require('@/assets/TECLADO.png')" target="_blank">
-          <img src="@/assets/TECLADO.png"
-               alt="Teclado Logitech Silencioso"
+        <a :href="produto.imagem" target="_blank">
+          <img :src="produto.imagem"
+               :alt="produto.nome"
                class="product-image"
                style="width: 90px; height: 75px; margin-left: 15px"/>
         </a>
         <div class="product-info">
           <div class="text-info">
-            <h3>Teclado Logitech Silent Touch</h3>
-            <div class="rating">
-              <span class="star">&#9733;</span>
-              <span class="star">&#9733;</span>
-              <span class="star">&#9733;</span>
-              <span class="star">&#9734;</span>
-              <span class="star">&#9734;</span>
-              <span class="ratings-count">(935 avaliações)</span>
-            </div>
-            <p class="price">R$ 199,90</p>
-          </div>
-          <button @click="adicionarAoCarrinho(produtos[0])" class="add-to-cart-button">Adicionar ao carrinho</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Produto 2 -->
-    <div class="title-container custom-container">
-      <div class="product-card">
-        <a :href="require('@/assets/PLACA DE VIDEO.png')" target="_blank">
-          <img src="@/assets/PLACA DE VIDEO.png"
-               alt="Placa De Vídeo Gigabyte NVIDIA GeForce RTX 4090 AORUS MASTER, 24GB..."
-               class="product-image"
-               style="width: 90px; height: 75px; margin-left: 15px"/>
-        </a>
-        <div class="product-info">
-          <div class="text-info">
-            <h3>Placa De Vídeo Gigabyte NVIDIA GeForce <p>RTX 4090 AORUS MASTER, 24GB...</p></h3>
+            <h3 v-html="produto.nome"></h3>
             <div class="rating">
               <span class="star">&#9733;</span>
               <span class="star">&#9733;</span>
               <span class="star">&#9733;</span>
               <span class="star">&#9733;</span>
               <span class="star">&#9734;</span>
-              <span class="ratings-count">(128 avaliações)</span>
+              <span class="ratings-count">({{ produto.avaliacoes }} avaliações)</span>
             </div>
-            <p class="price">R$ 13.899,90</p>
+            <p class="price">R$ {{ formatarPreco(produto.preco) }}</p>
           </div>
-          <button @click="adicionarAoCarrinho(produtos[1])" class="add-to-cart-button">Adicionar ao carrinho</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Produto 3 -->
-    <div class="title-container custom-container">
-      <div class="product-card">
-        <a :href="require('@/assets/PENDRIVE.png')" target="_blank">
-          <img src="@/assets/PENDRIVE.png"
-               alt="Pen Drive 128gb Cruzer Blade - Sandisk"
-               class="product-image"
-               style="width: 90px; height: 75px; margin-left: 15px"/>
-        </a>
-        <div class="product-info">
-          <div class="text-info">
-            <h3>Pen Drive 128gb Cruzer Blade - Sandisk</h3>
-            <div class="rating">
-              <span class="star">&#9733;</span>
-              <span class="star">&#9733;</span>
-              <span class="star">&#9733;</span>
-              <span class="star">&#9733;</span>
-              <span class="star">&#9734;</span>
-              <span class="ratings-count">(128 avaliações)</span>
-            </div>
-            <p class="price">R$ 79,80</p>
-          </div>
-          <button @click="adicionarAoCarrinho(produtos[2])" class="add-to-cart-button">Adicionar ao carrinho</button>
+          <button @click="adicionarAoCarrinho(produto)" class="add-to-cart-button">Adicionar ao carrinho</button>
         </div>
       </div>
     </div>
 
     <!-- Botões -->
     <div class="buttons-container">
-      <button @click="carregarMaisProdutos" class="button">Carregar mais produtos</button>
-      <button @click="$router.push('/PAGINA2')" class="button ir-para-carrinho">Ir para o carrinho</button>
-    </div>
+  <button v-if="mostrarBotaoCarregarMais" @click="carregarMaisProdutos" class="button">Carregar mais produtos</button>
+  <button @click="$router.push('/PAGINA2')" class="button ir-para-carrinho">Ir para o carrinho</button>
+</div>
 
-    <!-- Modal de Confirmação de Adição ao Carrinho -->
+    <!-- Modal de Confirmação -->
     <div v-if="isCartModalOpen" class="modal">
       <div class="modal-content">
         <button @click="closeCartModal" class="close-button">&times;</button>
@@ -113,58 +59,127 @@ export default {
         {
           id: 1,
           nome: "Teclado Logitech Silent Touch",
-          descricao: "Teclado silencioso para escritório",
           preco: 199.9,
-          quantidade: 1,
+          avaliacoes: 935,
           imagem: require('@/assets/TECLADO.png')
         },
         {
           id: 2,
-          nome: "Placa De Vídeo Gigabyte NVIDIA GeForce RTX 4090 AORUS MASTER, 24GB",
-          descricao: "Placa de vídeo poderosa para jogos",
+          nome: "Placa De Vídeo Gigabyte NVIDIA GeForce<br>RTX 4090 AORUS MASTER, 24GB",
           preco: 13899.9,
-          quantidade: 1,
+          avaliacoes: 128,
           imagem: require('@/assets/PLACA DE VIDEO.png')
         },
         {
           id: 3,
           nome: "Pen Drive 128gb Cruzer Blade - Sandisk",
-          descricao: "Pen drive USB de 128GB",
           preco: 79.8,
-          quantidade: 1,
+          avaliacoes: 128,
           imagem: require('@/assets/PENDRIVE.png')
         }
       ],
-      visibleProducts: 3,
-      totalProducts: 10,
+      produtosVisiveis: [], // Produtos atualmente visíveis na tela
       isCartModalOpen: false,
-      modalMessage: ""
+      modalMessage: "",
+      mostrarBotaoCarregarMais: true, // Controle de visibilidade do botão
+      novosProdutos: [ // Produtos adicionais que serão carregados ao clicar em "Carregar mais produtos"
+        {
+          nome: "Controle Sony Ps5 Dualsense, Sem Fio, Cobalt Blue",
+          preco: 429.00,
+          avaliacoes: 100,
+          imagem: require('@/assets/CONTROLE.png')
+        },
+        {
+          nome: "Smartphone Apple Iphone 13 256gb Meia Noite",
+          preco: 3899,
+          avaliacoes: 500,
+          imagem: require('@/assets/IPHONE.png')
+        },
+        {
+          nome: "Ventoinha Rise Mode, 120mm, Preto",
+          preco: 6.99,
+          avaliacoes: 290,
+          imagem: require('@/assets/VENTOINHA.png')
+        },
+        {
+          nome: "Microfone Hyperx Solocast Podcast, Usb",
+          preco: 395.25,
+          avaliacoes: 780,
+          imagem: require('@/assets/MICROFONE.png')
+        },
+        {
+          nome: "Mochila HyperX Knight, Até 16, Poliester, Preto",
+          preco: 639.00,
+          avaliacoes: 50,
+          imagem: require('@/assets/MOCHILA.png')
+        },
+        {
+          nome: "Carregador USB-C de 20W Apple Branco Original",
+          preco: 129.99,
+          avaliacoes: 170,
+          imagem: require('@/assets/CARREGADOR.png')
+        },
+        {
+          nome: "Pasta Térmica Rise Mode Silver Frost, 5g, Cinza",
+          preco: 10.99,
+          avaliacoes: 355,
+          imagem: require('@/assets/PASTA TERMICA.png')
+        }
+      ]
     };
   },
+  created() {
+    // Exibir os primeiros três produtos inicialmente
+    this.produtosVisiveis = this.produtos.slice(0, 3);
+  },
   methods: {
-    adicionarAoCarrinho(produto) {
-      if (!produto) {
-        console.error("Produto não encontrado.");
-        return;
-      }
+  adicionarAoCarrinho(produto) {
+    if (!produto) {
+      console.error("Produto não encontrado.");
+      return;
+    }
 
-      // Verifica se o produto já está no carrinho
-      const produtoNoCarrinho = this.$store.getters.cartItems.find(item => item.id === produto.id);
-      if (produtoNoCarrinho) {
-        this.modalMessage = `${produto.nome} já está no carrinho!`;
-      } else {
-        this.$store.commit("ADD_TO_CART", produto);
-        this.modalMessage = `${produto.nome} foi adicionado ao carrinho!`;
-      }
+    // Defina a quantidade inicial se ela ainda não existir
+    if (!produto.quantidade) {
+      produto.quantidade = 1;
+    }
 
-      this.isCartModalOpen = true; // Abre o modal de confirmação
+    // Verifica se o produto já está no carrinho
+    const produtoNoCarrinho = this.$store.getters.cartItems.find(item => item.id === produto.id);
+    if (produtoNoCarrinho) {
+      this.modalMessage = `${produto.nome} já está no carrinho!`;
+    } else {
+      // Certifique-se de enviar o objeto `produto` com o campo `quantidade` para o store
+      this.$store.commit("ADD_TO_CART", { ...produto });
+      this.modalMessage = `${produto.nome} foi adicionado ao carrinho!`;
+    }
+
+    this.isCartModalOpen = true; // Abre o modal de confirmação
+  },
+    carregarMaisProdutos() {
+      // Adiciona os novos produtos do array "novosProdutos" à lista de produtosVisiveis
+      const novosProdutosComIdsUnicos = this.novosProdutos.map((produto, index) => ({
+        ...produto,
+        id: Date.now() + index // Gera um ID único para cada novo produto
+      }));
+      this.produtosVisiveis.push(...novosProdutosComIdsUnicos);
+      
+      // Esconde o botão "Carregar mais produtos" após carregar novos produtos
+      this.mostrarBotaoCarregarMais = false;
     },
     closeCartModal() {
       this.isCartModalOpen = false;
+    },
+    formatarPreco(preco) {
+      if (preco >= 10000) {
+        return preco.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+      return preco.toFixed(2).replace(".", ",");
     }
   }
 };
 </script>
+
 
 <style scoped>
 .main-container {
@@ -239,6 +254,14 @@ h1 {
   cursor: pointer;
   border-radius: 5px;
   transition: background-color 0.3s;
+  
+  /* Adicione as linhas abaixo */
+  width: 200px; /* Defina uma largura fixa para o botão */
+  text-align: center; /* Centraliza o texto dentro do botão */
+}
+
+.add-to-cart-button:hover {
+  background-color: #2e9929;
 }
 
 .add-to-cart-button:hover {
